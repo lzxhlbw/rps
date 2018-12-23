@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Pragma"   content="no-cache"/>
+    <meta http-equiv="Cache-Control"   content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <title th:if="${job eq 'hr'}">HR</title>
+    <title th:if="${job eq 're'}">推荐人</title>
+    <title th:if="${job eq 'ad'}">管理员</title>
+    <link rel="stylesheet" th:href="@{../rps/pintuer.css}" href="../resources/pintuer.css" />
+    <link rel="stylesheet" th:href="@{../rps/admin.css}" href="../local/admin.css"/>
+    <script th:src="@{../rps/jquery.js}" src="../public/jquery.js"></script>
+</head>
+<body style="background-color:#f2f9fd;">
+<div class="header bg-main">
+    <div class="logo margin-big-left fadein-top" style="float:left">
+        <h1 th:if="${job eq 'hr'}">
+            <img th:src="@{/HR.png}" src="../static/HR.png" class="radius-circle rotate-hover" height="50" alt="" />HR
+        </h1>
+        <h1 th:if="${job eq 're'}">
+            <img th:src="@{/HR.png}" src="../static/HR.png" class="radius-circle rotate-hover" height="50" alt="" />推荐人
+        </h1>
+        <h1 th:if="${job eq 'ad'}">
+            <img th:src="@{/HR.png}" src="../static/HR.png" class="radius-circle rotate-hover" height="50" alt="" />管理员
+        </h1>
+    </div>
+    <div class="head-l" style="float: right">
+        <a class="button button-little bg-red" href="#" th:href="@{/logout}">
+            <span class="icon-power-off"></span> 退出登录
+        </a>
+    </div>
+</div>
+<div class="leftnav">
+    <div class="leftnav-title"><strong><span class="icon-list"></span>功能列表</strong></div>
+
+    <div th:if="${job eq 'hr'}">
+        <h2>
+            <span class="icon-user"></span> 发布招聘
+        </h2>
+    </div>
+
+
+    <div th:if="${job eq 'hr'}">
+        <ul style="display:block">
+            <li>
+                <a href="../templates/addJob.html" th:href="@{/hr/addJob}" target="right">
+                    <span class="icon-caret-right"></span> 普通/紧急招聘
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div th:if="${job eq 're'}">
+        <ul style="display:block">
+            <li>
+                <a href="../templates/recommendFollow.html" th:href="@{/re/recommendFollow}" target="right">
+                    <span class="icon-caret-right"></span> 推荐跟踪
+                </a>
+            </li>
+            <li>
+                <a href="../templates/addToReposHome.html" th:href="@{/re/addToReposHome}" target="right">
+                    <span class="icon-caret-right"></span> 导入人才库
+                </a>
+            </li>
+            <li>
+                <a href="../templates/scoreBoard.html" th:href="@{/re/scoreBoard}" target="right">
+                    <span class="icon-caret-right"></span> 积分排行
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div th:if="${job eq 'ad'}">
+        <h2>
+            <span class="icon-user"></span> 人员管理
+        </h2>
+    </div>
+
+    <div th:if="${job eq 'ad'}">
+        <ul style="display:block">
+            <li>
+                <a href="../templates/" th:href="@{/ad/userManage}" target="right">
+                    <span class="icon-caret-right"></span> 推荐人管理
+                </a>
+            </li>
+            <li>
+                <a href="../templates/" th:href="@{/ad/hrManage}" target="right">
+                    <span class="icon-caret-right"></span> HR管理
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div th:if="${job eq 'hr'}">
+        <h2>
+            <span class="icon-user"></span> 招聘处理
+        </h2>
+    </div>
+    <div th:if="${job eq 'ad'}">
+        <h2>
+            <span class="icon-user"></span> 人才库管理
+        </h2>
+    </div>
+
+    <div th:if="${job eq 'ad'}">
+        <ul style="display:block">
+            <li>
+                <a href="../templates/" th:href="@{/ad/recommendedPersonHaveChecked}" target="right">
+                    <span class="icon-caret-right"></span> 已审核人才库
+                </a>
+            </li>
+            <li>
+                <a href="../templates/" th:href="@{/ad/recommendedPersonNotChecked}" target="right">
+                    <span class="icon-caret-right"></span> 未审核人才库
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div th:if="${job eq 'ad'}">
+        <h2>
+            <span class="icon-user"></span> 积分管理
+        </h2>
+    </div>
+
+    <div th:if="${job eq 'ad'}">
+        <ul style="display:block">
+            <li>
+                <a href="../templates/" th:href="@{/ad/scoreRuleManage}" target="right">
+                    <span class="icon-caret-right"></span> 积分规则
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div th:if="${job eq 'hr'}">
+        <ul style="display:block">
+            <li>
+                <a href="../templates/hrHomeDetail.html" target="right" th:href="@{/hr/homeDetail }">
+                    <span class="icon-caret-right"></span> 待处理
+                </a>
+            </li>
+            <li>
+                <a href="../templates/hrHomeDetail.html" target="right" th:href="@{/hr/findAllHaveNoNeeds}">
+                    <span class="icon-caret-right"></span> 已处理
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $(".leftnav h2").click(function() {
+            $(this).next().slideToggle(200);
+            $(this).toggleClass("on");
+        })
+        $(".leftnav ul li a").click(function() {
+            $("#a_leader_txt").text($(this).text());
+            $(".leftnav ul li a").removeClass("on");
+            $(this).addClass("on");
+        })
+    });
+</script>
+<ul class="bread">
+
+    <li th:unless="${job eq 'ad'}"><a th:href="@{/hr/homeDetail}" href="../templates/hrHomeDetail.html" target="right" class="icon-home"> 已发布招聘信息</a></li>
+    <li th:if="${job eq 'ad'}"><a th:href="@{/ad/userManage}" href="../templates/userManage.html" target="right" class="icon-home"> 推荐人管理</a></li>
+    <li><a href="##" id="a_leader_txt">网站信息</a></li>
+    <li><b>当前语言：</b><span style="color:darkred;">中文
+                </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;切换语言:&nbsp;&nbsp;
+        <a href="##">中文</a> &nbsp;&nbsp;<a href="##">英文</a> </li>
+</ul>
+<div class="admin" th:unless="${job eq 'ad'}" >
+    <iframe scrolling="auto" rameborder="0" th:src="@{/hr/homeDetail}" src="../templates/hrHomeDetail.html" name="right" width="100%" height="100%"></iframe>
+</div>
+<div class="admin" th:if="${job eq 'ad'}" >
+    <iframe scrolling="auto" rameborder="0" th:src="@{/ad/userManage}" src="../templates/userManage.html" name="right" width="100%" height="100%"></iframe>
+</div>
+</body>
+</html>

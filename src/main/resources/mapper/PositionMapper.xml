@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hdu.rps.mapper.PositionMapper">
+  <resultMap id="BaseResultMap" type="com.hdu.rps.model.Position">
+    <id column="PosNo" jdbcType="INTEGER" property="posno" />
+    <result column="PosType" jdbcType="INTEGER" property="postype" />
+    <result column="PosState" jdbcType="INTEGER" property="posstate" />
+    <result column="PosOffice" jdbcType="VARCHAR" property="posoffice" />
+    <result column="PosTime" jdbcType="VARCHAR" property="postime" />
+    <result column="PosDeadline" jdbcType="VARCHAR" property="posdeadline" />
+    <result column="PosNeeds" jdbcType="INTEGER" property="posneeds" />
+    <result column="PosIntro" jdbcType="VARCHAR" property="posintro" />
+    <result column="PosSalary1" jdbcType="INTEGER" property="possalary1" />
+    <result column="PosSalary2" jdbcType="INTEGER" property="possalary2" />
+    <result column="PosSkill" jdbcType="VARCHAR" property="posskill" />
+    <result column="PosMessage" jdbcType="VARCHAR" property="posmessage" />
+  </resultMap>
+
+  <resultMap id="findAllMap" type="com.hdu.rps.model.Position">
+    <result column="PosType" jdbcType="INTEGER" property="postype" />
+    <result column="PosState" jdbcType="INTEGER" property="posstate" />
+    <result column="PosOffice" jdbcType="VARCHAR" property="posoffice" />
+    <result column="PosTime" jdbcType="VARCHAR" property="postime" />
+    <result column="PosDeadline" jdbcType="VARCHAR" property="posdeadline" />
+    <result column="PosNeeds" jdbcType="INTEGER" property="posneeds" />
+    <result column="PosIntro" jdbcType="VARCHAR" property="posintro" />
+    <result column="PosSalary1" jdbcType="INTEGER" property="possalary1" />
+    <result column="PosSalary2" jdbcType="INTEGER" property="possalary2" />
+    <result column="PosSkill" jdbcType="VARCHAR" property="posskill" />
+    <result column="PosMessage" jdbcType="VARCHAR" property="posmessage" />
+  </resultMap>
+
+  <select id="findAllHaveNeeds" resultMap="findAllMap">
+    SELECT * from position
+    WHERE PosState &gt; 0
+  </select>
+
+  <select id="findAllHaveNoNeeds" resultMap="findAllMap">
+    SELECT * from position
+    WHERE PosState &lt; 1
+  </select>
+  <select id="selectDeatTimeByPositionID" parameterType="java.lang.Integer" resultType="java.lang.String">
+    SELECT PosDeadline
+    from position
+    WHERE PosNo = #{posno,jdbcType=INTEGER}
+  </select>
+  <sql id="Base_Column_List">
+    PosNo, PosType, PosState, PosOffice, PosTime, PosDeadline, PosNeeds, PosIntro, PosSalary1, 
+    PosSalary2, PosSkill, PosMessage
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from position
+    where PosNo = #{posno,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from position
+    where PosNo = #{posno,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hdu.rps.model.Position">
+    insert into position (PosType, PosState,
+      PosOffice, PosTime, PosDeadline, 
+      PosNeeds, PosIntro, PosSalary1, 
+      PosSalary2, PosSkill, PosMessage
+      )
+    values (#{postype,jdbcType=INTEGER}, #{posstate,jdbcType=INTEGER},
+      #{posoffice,jdbcType=VARCHAR}, #{postime,jdbcType=VARCHAR}, #{posdeadline,jdbcType=VARCHAR},
+      #{posneeds,jdbcType=INTEGER}, #{posintro,jdbcType=VARCHAR}, #{possalary1,jdbcType=INTEGER}, 
+      #{possalary2,jdbcType=INTEGER}, #{posskill,jdbcType=VARCHAR}, #{posmessage,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hdu.rps.model.Position">
+    insert into position
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="posno != null">
+        PosNo,
+      </if>
+      <if test="postype != null">
+        PosType,
+      </if>
+      <if test="posstate != null">
+        PosState,
+      </if>
+      <if test="posoffice != null">
+        PosOffice,
+      </if>
+      <if test="postime != null">
+        PosTime,
+      </if>
+      <if test="posdeadline != null">
+        PosDeadline,
+      </if>
+      <if test="posneeds != null">
+        PosNeeds,
+      </if>
+      <if test="posintro != null">
+        PosIntro,
+      </if>
+      <if test="possalary1 != null">
+        PosSalary1,
+      </if>
+      <if test="possalary2 != null">
+        PosSalary2,
+      </if>
+      <if test="posskill != null">
+        PosSkill,
+      </if>
+      <if test="posmessage != null">
+        PosMessage,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="posno != null">
+        #{posno,jdbcType=INTEGER},
+      </if>
+      <if test="postype != null">
+        #{postype,jdbcType=INTEGER},
+      </if>
+      <if test="posstate != null">
+        #{posstate,jdbcType=INTEGER},
+      </if>
+      <if test="posoffice != null">
+        #{posoffice,jdbcType=VARCHAR},
+      </if>
+      <if test="postime != null">
+        #{postime,jdbcType=VARCHAR},
+      </if>
+      <if test="posdeadline != null">
+        #{posdeadline,jdbcType=VARCHAR},
+      </if>
+      <if test="posneeds != null">
+        #{posneeds,jdbcType=INTEGER},
+      </if>
+      <if test="posintro != null">
+        #{posintro,jdbcType=VARCHAR},
+      </if>
+      <if test="possalary1 != null">
+        #{possalary1,jdbcType=INTEGER},
+      </if>
+      <if test="possalary2 != null">
+        #{possalary2,jdbcType=INTEGER},
+      </if>
+      <if test="posskill != null">
+        #{posskill,jdbcType=VARCHAR},
+      </if>
+      <if test="posmessage != null">
+        #{posmessage,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hdu.rps.model.Position">
+    update position
+    <set>
+      <if test="postype != null">
+        PosType = #{postype,jdbcType=INTEGER},
+      </if>
+      <if test="posstate != null">
+        PosState = #{posstate,jdbcType=INTEGER},
+      </if>
+      <if test="posoffice != null">
+        PosOffice = #{posoffice,jdbcType=VARCHAR},
+      </if>
+      <if test="postime != null">
+        PosTime = #{postime,jdbcType=VARCHAR},
+      </if>
+      <if test="posdeadline != null">
+        PosDeadline = #{posdeadline,jdbcType=VARCHAR},
+      </if>
+      <if test="posneeds != null">
+        PosNeeds = #{posneeds,jdbcType=INTEGER},
+      </if>
+      <if test="posintro != null">
+        PosIntro = #{posintro,jdbcType=VARCHAR},
+      </if>
+      <if test="possalary1 != null">
+        PosSalary1 = #{possalary1,jdbcType=INTEGER},
+      </if>
+      <if test="possalary2 != null">
+        PosSalary2 = #{possalary2,jdbcType=INTEGER},
+      </if>
+      <if test="posskill != null">
+        PosSkill = #{posskill,jdbcType=VARCHAR},
+      </if>
+      <if test="posmessage != null">
+        PosMessage = #{posmessage,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PosNo = #{posno,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hdu.rps.model.Position">
+    update position
+    set PosType = #{postype,jdbcType=INTEGER},
+      PosState = #{posstate,jdbcType=INTEGER},
+      PosOffice = #{posoffice,jdbcType=VARCHAR},
+      PosTime = #{postime,jdbcType=VARCHAR},
+      PosDeadline = #{posdeadline,jdbcType=VARCHAR},
+      PosNeeds = #{posneeds,jdbcType=INTEGER},
+      PosIntro = #{posintro,jdbcType=VARCHAR},
+      PosSalary1 = #{possalary1,jdbcType=INTEGER},
+      PosSalary2 = #{possalary2,jdbcType=INTEGER},
+      PosSkill = #{posskill,jdbcType=VARCHAR},
+      PosMessage = #{posmessage,jdbcType=VARCHAR}
+    where PosNo = #{posno,jdbcType=INTEGER}
+  </update>
+</mapper>

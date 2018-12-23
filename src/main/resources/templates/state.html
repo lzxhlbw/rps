@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../style.css}" href="../resources/style.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{../jquery.step.css}" href="../local/jquery.step.css"/>
+    <script th:src="@{../jquery-2.1.1.min.js}" src="../public/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" th:src="@{../jquery.step.js}" src="../public/jquery.step.js"></script>
+    <style type="text/css">
+        <!--
+        a:link {  color: #000000; text-decoration: none}
+        a:visited {  color: #000000; text-decoration: none}
+        a:hover {  color: #000000; text-decoration: none}
+        -->
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="team-members row">
+        <h1 th:if="${zero == true}">尚未有人选</h1>
+        <div class="single-member effect-2" th:unless="${zero == true}" th:each="recommendedPerson,iterStat : ${recommendedPersonByPosNo}">
+            <div class="member-image">
+                <img th:src="@{/re/getRecommendedPersonPhoto/(userPhoto=${recommendedPerson.rdpphoto})}"  alt="被推荐人照片"/><!--这里是每个人的头像-->
+            </div>
+            <div class="member-info">
+                <h3 th:text="${recommendedPerson.rdpname}">石佳豪</h3>
+                <br/>
+                <h4 th:text="${recommendedPerson.rdpmajor}">软件工程</h4>
+                <div class="social-touch" >
+                    <a class="tweet-touch" th:href="@{/re/getRecommendedPersonDetail(personID=${recommendedPerson.rdpno})}" href="../templates/recommendedPersonDetail.html">详细信息</a>
+                </div>
+                <div th:if="${display == true || havaPassed == false || haveOver == true || havaOver == null}">
+                    <label th:unless="${done == true}">
+                        <div style="float:left;">
+                            <a th:href="@{/hr/notPass/{recommendedPersonID}/{positionNo}(recommendedPersonID=${recommendedPerson.rdpno},positionNo=${positionNo})}" class="button1">不通过</a>
+                        </div>
+                    </label>
+                    <label th:unless="${done == true}">
+                        <div style="float:right;">
+                            <a th:href="@{/hr/pass/{recommendedPersonID}/{positionNo}(recommendedPersonID=${recommendedPerson.rdpno},positionNo=${positionNo})}" class="button2">通过</a>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

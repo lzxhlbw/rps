@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hdu.rps.mapper.RecommendedPersonMapper">
+  <resultMap id="BaseResultMap" type="com.hdu.rps.model.RecommendedPerson">
+    <id column="RdPNo" jdbcType="INTEGER" property="rdpno" /><!--被推荐人号-->
+    <result column="RdPName" jdbcType="VARCHAR" property="rdpname" /><!--被推荐人姓名-->
+    <result column="RdPNation" jdbcType="INTEGER" property="rdpnation" /><!--？？？被推荐人国籍，但这是int类型，从这一点讲，还缺一张国家/地区表-->
+    <result column="RdPLocate" jdbcType="VARCHAR" property="rdplocate" /><!--应该是被推荐人现住址-->
+    <result column="RdPBirthday" jdbcType="VARCHAR" property="rdpbirthday" /><!--生日-->
+    <result column="RdPSex" jdbcType="INTEGER" property="rdpsex" /><!--性别-->
+    <result column="RdPDeal" jdbcType="INTEGER" property="rdpdeal" /><!--？？？-->
+    <result column="RdPInsurance" jdbcType="INTEGER" property="rdpinsurance" /><!--保险-->
+    <result column="RdPMarriage" jdbcType="INTEGER" property="rdpmarriage" /><!--婚姻-->
+    <result column="RdPEnglishLevel" jdbcType="VARCHAR" property="rdpenglishlevel" /><!--英语水平-->
+    <result column="RdPComputLevel" jdbcType="VARCHAR" property="rdpcomputlevel" /><!--电脑水平-->
+    <result column="RdPJobAge" jdbcType="INTEGER" property="rdpjobage" /><!--工作年头-->
+    <result column="RdPPhone" jdbcType="VARCHAR" property="rdpphone" /><!-- -->
+    <result column="RdPAddress" jdbcType="VARCHAR" property="rdpaddress" />
+    <result column="RdPSchool" jdbcType="VARCHAR" property="rdpschool" />
+    <result column="RdPMajor" jdbcType="VARCHAR" property="rdpmajor" />
+    <result column="RdPEmail" jdbcType="VARCHAR" property="rdpemail" />
+    <result column="RdPPhoto" jdbcType="VARCHAR" property="rdpphoto" />
+    <result column="RdpBrief" jdbcType="VARCHAR" property="rdpbrief" />
+    <result column="RdpGraduation" jdbcType="VARCHAR" property="rdpgraduation" />
+    <result column="RdpInCompany" jdbcType="INTEGER" property="rdpincompany"/>
+    <result column="RdpHaveChecked" jdbcType="INTEGER" property="rdphavechecked"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    RdPNo, RdPName, RdPNation, RdPLocate, RdPBirthday, RdPSex, RdPDeal, RdPInsurance, 
+    RdPMarriage, RdPEnglishLevel, RdPComputLevel, RdPJobAge, RdPPhone, RdPAddress, RdPSchool, 
+    RdPMajor, RdPEmail, RdPPhoto, RdpBrief, RdpGraduation,RdpInCompany,RdpHaveChecked
+  </sql>
+  <select id="selectByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from recommendedperson
+    where RdPEmail = #{rdpemail,jdbcType=VARCHAR}
+  </select>
+  <select id="findAllHaveChecked" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from recommendedperson
+    where RdpInCompany = 0 and RdpHaveChecked = 1
+  </select>
+  <select id="findAllNotChecked" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from recommendedperson
+    where RdpInCompany = 0 and RdpHaveChecked = 0
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from recommendedperson
+    where RdPNo = #{rdpno,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from recommendedperson
+    where RdPNo = #{rdpno,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByEmail" parameterType="java.lang.String">
+    delete from recommendedperson
+    where RdPEmail = #{rdpemail,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.hdu.rps.model.RecommendedPerson">
+    insert into recommendedperson (RdPNo, RdPName, RdPNation, 
+      RdPLocate, RdPBirthday, RdPSex, 
+      RdPDeal, RdPInsurance, RdPMarriage, 
+      RdPEnglishLevel, RdPComputLevel, RdPJobAge, 
+      RdPPhone, RdPAddress, RdPSchool, 
+      RdPMajor, RdPEmail, RdPPhoto, 
+      RdpBrief, RdpGraduation,RdpInCompany,RdpHaveChecked)
+    values (#{rdpno,jdbcType=INTEGER}, #{rdpname,jdbcType=VARCHAR}, #{rdpnation,jdbcType=INTEGER}, 
+      #{rdplocate,jdbcType=VARCHAR}, #{rdpbirthday,jdbcType=VARCHAR}, #{rdpsex,jdbcType=INTEGER},
+      #{rdpdeal,jdbcType=INTEGER}, #{rdpinsurance,jdbcType=INTEGER}, #{rdpmarriage,jdbcType=INTEGER}, 
+      #{rdpenglishlevel,jdbcType=VARCHAR}, #{rdpcomputlevel,jdbcType=VARCHAR}, #{rdpjobage,jdbcType=INTEGER},
+      #{rdpphone,jdbcType=VARCHAR}, #{rdpaddress,jdbcType=VARCHAR}, #{rdpschool,jdbcType=VARCHAR},
+      #{rdpmajor,jdbcType=VARCHAR}, #{rdpemail,jdbcType=VARCHAR}, #{rdpphoto,jdbcType=VARCHAR}, 
+      #{rdpbrief,jdbcType=VARCHAR}, #{rdpgraduation,jdbcType=VARCHAR},#{rdpincompany,jdbcType=INTEGER},#{rdphavechecked,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hdu.rps.model.RecommendedPerson">
+    insert into recommendedperson
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rdpno != null">
+        RdPNo,
+      </if>
+      <if test="rdpname != null">
+        RdPName,
+      </if>
+      <if test="rdpnation != null">
+        RdPNation,
+      </if>
+      <if test="rdplocate != null">
+        RdPLocate,
+      </if>
+      <if test="rdpbirthday != null">
+        RdPBirthday,
+      </if>
+      <if test="rdpsex != null">
+        RdPSex,
+      </if>
+      <if test="rdpdeal != null">
+        RdPDeal,
+      </if>
+      <if test="rdpinsurance != null">
+        RdPInsurance,
+      </if>
+      <if test="rdpmarriage != null">
+        RdPMarriage,
+      </if>
+      <if test="rdpenglishlevel != null">
+        RdPEnglishLevel,
+      </if>
+      <if test="rdpcomputlevel != null">
+        RdPComputLevel,
+      </if>
+      <if test="rdpjobage != null">
+        RdPJobAge,
+      </if>
+      <if test="rdpphone != null">
+        RdPPhone,
+      </if>
+      <if test="rdpaddress != null">
+        RdPAddress,
+      </if>
+      <if test="rdpschool != null">
+        RdPSchool,
+      </if>
+      <if test="rdpmajor != null">
+        RdPMajor,
+      </if>
+      <if test="rdpemail != null">
+        RdPEmail,
+      </if>
+      <if test="rdpphoto != null">
+        RdPPhoto,
+      </if>
+      <if test="rdpbrief != null">
+        RdpBrief,
+      </if>
+      <if test="rdpgraduation != null">
+        RdpGraduation,
+      </if>
+      <if test="rdpincompany != null">
+        RdpInCompany
+      </if>
+      <if test="rdphavechecked != null">
+        RdpHaveChecked
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rdpno != null">
+        #{rdpno,jdbcType=INTEGER},
+      </if>
+      <if test="rdpname != null">
+        #{rdpname,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpnation != null">
+        #{rdpnation,jdbcType=INTEGER},
+      </if>
+      <if test="rdplocate != null">
+        #{rdplocate,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpbirthday != null">
+        #{rdpbirthday,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpsex != null">
+        #{rdpsex,jdbcType=INTEGER},
+      </if>
+      <if test="rdpdeal != null">
+        #{rdpdeal,jdbcType=INTEGER},
+      </if>
+      <if test="rdpinsurance != null">
+        #{rdpinsurance,jdbcType=INTEGER},
+      </if>
+      <if test="rdpmarriage != null">
+        #{rdpmarriage,jdbcType=INTEGER},
+      </if>
+      <if test="rdpenglishlevel != null">
+        #{rdpenglishlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpcomputlevel != null">
+        #{rdpcomputlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpjobage != null">
+        #{rdpjobage,jdbcType=INTEGER},
+      </if>
+      <if test="rdpphone != null">
+        #{rdpphone,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpaddress != null">
+        #{rdpaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpschool != null">
+        #{rdpschool,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpmajor != null">
+        #{rdpmajor,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpemail != null">
+        #{rdpemail,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpphoto != null">
+        #{rdpphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpbrief != null">
+        #{rdpbrief,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpgraduation != null">
+        #{rdpgraduation,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpincompany != null">
+        #{rdpincompany,jdbcType=INTEGER}
+      </if>
+      <if test="rdphavechecked != null">
+        #{rdphavechecked,jdbcType=INTEGER}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hdu.rps.model.RecommendedPerson">
+    update recommendedperson
+    <set>
+      <if test="rdpname != null">
+        RdPName = #{rdpname,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpnation != null">
+        RdPNation = #{rdpnation,jdbcType=INTEGER},
+      </if>
+      <if test="rdplocate != null">
+        RdPLocate = #{rdplocate,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpbirthday != null">
+        RdPBirthday = #{rdpbirthday,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpsex != null">
+        RdPSex = #{rdpsex,jdbcType=INTEGER},
+      </if>
+      <if test="rdpdeal != null">
+        RdPDeal = #{rdpdeal,jdbcType=INTEGER},
+      </if>
+      <if test="rdpinsurance != null">
+        RdPInsurance = #{rdpinsurance,jdbcType=INTEGER},
+      </if>
+      <if test="rdpmarriage != null">
+        RdPMarriage = #{rdpmarriage,jdbcType=INTEGER},
+      </if>
+      <if test="rdpenglishlevel != null">
+        RdPEnglishLevel = #{rdpenglishlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpcomputlevel != null">
+        RdPComputLevel = #{rdpcomputlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpjobage != null">
+        RdPJobAge = #{rdpjobage,jdbcType=INTEGER},
+      </if>
+      <if test="rdpphone != null">
+        RdPPhone = #{rdpphone,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpaddress != null">
+        RdPAddress = #{rdpaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpschool != null">
+        RdPSchool = #{rdpschool,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpmajor != null">
+        RdPMajor = #{rdpmajor,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpemail != null">
+        RdPEmail = #{rdpemail,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpphoto != null">
+        RdPPhoto = #{rdpphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpbrief != null">
+        RdpBrief = #{rdpbrief,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpgraduation != null">
+        RdpGraduation = #{rdpgraduation,jdbcType=VARCHAR},
+      </if>
+      <if test="rdpincompany != null">
+        RdpInCompany = #{rdpincompany,jdbcType=INTEGER},
+      </if>
+      <if test="rdphavechecked != null">
+        RdpHaveChecked = #{rdphavechecked,jdbcType=INTEGER}
+      </if>
+    </set>
+    where RdPNo = #{rdpno,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hdu.rps.model.RecommendedPerson">
+    update recommendedperson
+    set RdPName = #{rdpname,jdbcType=VARCHAR},
+      RdPNation = #{rdpnation,jdbcType=INTEGER},
+      RdPLocate = #{rdplocate,jdbcType=VARCHAR},
+      RdPBirthday = #{rdpbirthday,jdbcType=VARCHAR},
+      RdPSex = #{rdpsex,jdbcType=INTEGER},
+      RdPDeal = #{rdpdeal,jdbcType=INTEGER},
+      RdPInsurance = #{rdpinsurance,jdbcType=INTEGER},
+      RdPMarriage = #{rdpmarriage,jdbcType=INTEGER},
+      RdPEnglishLevel = #{rdpenglishlevel,jdbcType=VARCHAR},
+      RdPComputLevel = #{rdpcomputlevel,jdbcType=VARCHAR},
+      RdPJobAge = #{rdpjobage,jdbcType=INTEGER},
+      RdPPhone = #{rdpphone,jdbcType=VARCHAR},
+      RdPAddress = #{rdpaddress,jdbcType=VARCHAR},
+      RdPSchool = #{rdpschool,jdbcType=VARCHAR},
+      RdPMajor = #{rdpmajor,jdbcType=VARCHAR},
+      RdPEmail = #{rdpemail,jdbcType=VARCHAR},
+      RdPPhoto = #{rdpphoto,jdbcType=VARCHAR},
+      RdpBrief = #{rdpbrief,jdbcType=VARCHAR},
+      RdpGraduation = #{rdpgraduation,jdbcType=VARCHAR},
+      RdpInCompany = #{rdpincompany,jdbcType=INTEGER},
+      RdpHaveChecked = #{rdphavechecked,jdbcType=INTEGER}
+    where RdPNo = #{rdpno,jdbcType=INTEGER}
+  </update>
+</mapper>

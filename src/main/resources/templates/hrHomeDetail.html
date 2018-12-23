@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Pragma"   content="no-cache"/>
+    <meta http-equiv="Cache-Control"   content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <title>信息展示</title>
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/pintuer.css}" href="../resources/pintuer.css"/>
+    <link rel="stylesheet" th:href="@{/admin.css}" href="../resources/admin.css"/>
+    <script th:src="@{/jquery.js}" src="../public/jquery.js"></script>
+    <script th:src="@{/pintuer.js}" src="../public/pintuer.js"></script>
+    <link th:href="@{/bootstrap.css}" rel="stylesheet" href="../resources/bootstrap.css"/>
+    <style type="text/css">
+        body{text-align:center}
+        table{width:100%;height:7%;align:center;align-content: center}
+    </style>
+    <script th:if="${haveRecomended == true}">
+        alert("该被推荐人已经被推荐过");
+        window.location.replace("/rps/hr/homeDetail");
+    </script>
+    <script th:if="${havaDelayed == true}">
+        alert("该招聘信息已经逾期");
+        window.location.replace("/rps/hr/homeDetail");
+    </script>
+    <script th:if="${rdp == -1}">
+        alert("人才库已存在该人员");
+        window.location.replace("/rps/hr/homeDetail");
+    </script>
+    <script th:if="${rdp == -2}">
+        alert("本公司已存在该人员");
+        window.location.replace("/rps/hr/homeDetail");
+    </script>
+</head>
+<div class="title" th:unless="${haveRecomended == true}">招聘信息</div>
+<style type="text/css">
+    table.hovertable th {
+        background-color:#c3dde0;
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #a9c6c9;
+    }
+    table.hovertable tr {
+        background-color:#d4e3e5;
+    }
+    table.hovertable td {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #a9c6c9;
+    }
+</style>
+<body th:unless="${haveRecomended == true}">
+<div style="float: right">
+    <li th:if="${job eq 'hr'}" th:unless="${noNeeds == true}">
+        <button type="button" class="button border-green" id="checkall" ><span class="icon-check"></span> 全选</button>
+        <button class="button border-red" onclick="DelSelect()"><span class="icon-trash-o"></span> 批量删除</button>
+    </li>
+</div>
+<table class="hovertable">
+    <tr>
+        <th th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" type="checkbox" width="40px" th:width="40px"></th>
+        <th style="text-align: center" width="40px" th:width="40px">序号</th>
+        <th style="text-align: center" width="90px" th:width="90px">岗位</th>
+        <th style="text-align: center" width="50px" th:width="50px">招聘人数</th>
+        <th style="text-align: center" width="105px" th:width="105px">工作地点</th>
+        <th style="text-align: center" width="110px" th:width="110px">发布时间</th>
+        <th style="text-align: center" width="100px" th:width="100px">截止时间</th>
+        <th style="text-align: center" width="110px" th:width="110px">薪资</th>
+        <th style="text-align: center" width="200px" th:width="200px">岗位职责</th>
+        <th style="text-align: center" width="90px" th:width="90px">岗位要求</th>
+        <th style="text-align: center" width="90px" th:width="90px">备注</th>
+        <th style="text-align: center" width="110px" th:width="110px">操作</th>
+    </tr>
+    <tbody>
+    <tr th:each="position,iterStat : ${positionList}" class="tr-link">
+        <td th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" style="text-align:left; padding-left:20px;">
+            <input type="checkbox" name="id[]" value="" id="id[]" th:value="${position.posno}"/>
+        </td>
+        <th th:text="${iterStat.count}">100</th>
+        <td th:if="${position.postype == 1}"><a th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" th:href="@{/hr/needToBeDoneDetail(positionID = ${position.posno})}">java工程师</a><h5 th:if="${job eq 're' || noNeeds == true}">java工程师</h5></td>
+        <td th:if="${position.postype == 2}"><a th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" th:href="@{/hr/needToBeDoneDetail(positionID = ${position.posno})}">前端工程师</a><h5 th:if="${job eq 're' || noNeeds == true}">前端工程师</h5></td>
+        <td th:if="${position.postype == 3}"><a th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" th:href="@{/hr/needToBeDoneDetail(positionID = ${position.posno})}">后台工程师</a><h5 th:if="${job eq 're' || noNeeds == true}">后台工程师</h5></td>
+        <td th:if="${position.postype == 4}"><a th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" th:href="@{/hr/needToBeDoneDetail(positionID = ${position.posno})}">UI设计师</a><h5 th:if="${job eq 're' || noNeeds == true}">UI设计师</h5></td>
+        <td th:if="${position.postype == 5}"><a th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" th:href="@{/hr/needToBeDoneDetail(positionID = ${position.posno})}">市场经理</a><h5 th:if="${job eq 're' || noNeeds == true}">市场经理</h5></td>
+        <td th:if="${position.postype == 6}"><a th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" th:href="@{/hr/needToBeDoneDetail(positionID = ${position.posno})}">财务</a><h5 th:if="${job eq 're' || noNeeds == true}">财务</h5></td>
+        <td th:if="${position.postype == 7}"><a th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" th:href="@{/hr/needToBeDoneDetail(positionID = ${position.posno})}">总经理助理</a><h5 th:if="${job eq 're' || noNeeds == true}">总经理助理</h5></td>
+        <td th:if="${position.postype == 8}"><a th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" th:href="@{/hr/needToBeDoneDetail(positionID = ${position.posno})}">文员</a><h5 th:if="${job eq 're' || noNeeds == true}">文员</h5></td>
+        <td th:text="${position.posneeds}">1000</td>
+        <td th:text="${position.posoffice}">宁夏回族自治区某某某市</td>
+        <td th:text="${position.postime}">2017-11-14 19:31:30</td>
+        <td th:text="${position.posdeadline}">2017-12-31 12:00</td>
+        <td th:text="|${position.possalary1}-${position.possalary2}|">10000-11000</td>
+        <td th:utext="${position.posintro}">配合团队完成原型设计等前端工作</td>
+        <td th:text="${position.posskill}">软件工程-英语六级-3-5年</td>
+        <td th:text="${position.posmessage}">备注</td>
+        <td>
+            <div class="button-group">
+                <a th:if="${job eq 'hr'}" th:unless="${noNeeds == true}" class="button border-red" href="#" th:href="@{/hr/del/{id}(id=${position.posno})}"
+                   onclick="return del()" th:value="${position.posno}" value="1">
+                    <span class="icon-trash-o"></span> 删除
+                </a>
+
+                <a th:if="${job eq 're'}" class="button border-green" href="#" th:href="@{/re/recommendBtn(positionID = ${position.posno})}" >
+                    <span class="icon-send"></span> 推荐
+                </a>
+
+                <a th:if="${noNeeds == true}" class="button border-blue" href="#" th:href="@{/hr/lookHaveNoNeedsPosition(positionID = ${position.posno})}">
+                    <span class="icon-file"></span> 查看
+                </a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    //单个删除
+    function del() {
+        if (confirm("您确定要删除吗？")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //全选
+    $("#checkall").click(function() {
+        var flag = -1;
+
+        $("input[name='id[]']").each(function() {
+            if (this.checked) {
+
+            } else {    //有未选中的
+                flag = 0;
+            }
+        });
+        if(flag == 0) {
+            $("input[name='id[]']").each(function() {
+                this.checked = true;
+            });
+        } else {        //全选中
+            $("input[name='id[]']").each(function() {
+                this.checked = false;
+            });
+        }
+    })
+
+    //批量删除
+    function DelSelect() {
+        var Checkbox = false;
+        $("input[name='id[]']").each(function() {
+            if (this.checked == true) {
+                Checkbox = true;
+            }
+        });
+        if (Checkbox) {
+            var t = confirm("您确认要删除选中的内容吗？");
+            if (t == false) {
+                return false;
+            } else {
+                var checkedID="";
+                $("input[name='id[]']").each(function() {
+                    if (this.checked == true) {
+                        checkedID += this.value + ",";
+
+                    }
+                });
+                window.location.replace("/rps/hr/delSelected?checkedID="+checkedID);
+            }
+        } else {
+            alert("请选择您要删除的内容!");
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

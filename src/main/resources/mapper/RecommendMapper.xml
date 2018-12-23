@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hdu.rps.mapper.RecommendMapper">
+  <resultMap id="BaseResultMap" type="com.hdu.rps.model.Recommend">
+    <id column="RcdNo" jdbcType="INTEGER" property="rcdno" /><!--推荐记录号-自增字段-->
+    <result column="UserNo" jdbcType="INTEGER" property="userno" /><!--用户号-外键-推荐人号-->
+    <result column="RePNo" jdbcType="INTEGER" property="repno" /><!--被推荐人号-->
+    <result column="RcdState" jdbcType="INTEGER" property="rcdstate" /><!--？？？推荐状态-存在多种数据结构可能-->
+    <result column="RcdAddTime" jdbcType="VARCHAR" property="rcdaddtime" /><!--本推荐记录的添加时间-->
+    <result column="RcdModTime" jdbcType="VARCHAR" property="rcdmodtime" /><!--本推荐记录的修改时间-->
+    <result column="RcdIntro" jdbcType="VARCHAR" property="rcdintro" /><!--???-->
+    <result column="PosNo" jdbcType="INTEGER" property="posno" /><!--被推荐到的职位号-外键-->
+  </resultMap>
+  <sql id="Base_Column_List">
+    RcdNo, UserNo, RePNo, RcdState, RcdAddTime, RcdModTime, RcdIntro, PosNo
+  </sql>
+  <select id="selectRecommendByUserno" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from recommend
+    where UserNo = #{userno,jdbcType=INTEGER}
+  </select>
+  <select id="selectRecommendedPersonIDByUserno" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT RepNo
+    from recommend
+    where UserNo = #{userno,jdbcType=INTEGER}
+  </select>
+  <select id="selectRecommendedPersonIDByPosnoAndState" resultType="java.lang.Integer">
+    SELECT RepNo
+    from recommend
+    where PosNo = #{posno,jdbcType=INTEGER} and RcdState = #{state,jdbcType=INTEGER}
+  </select>
+  <select id="selectByRepNo" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from recommend
+    where RepNo = #{repno,jdbcType=INTEGER}
+  </select>
+  <select id="selectRecommendedPersonIDByPosno" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT RepNo
+    from recommend
+    where PosNo = #{posno,jdbcType=INTEGER}
+  </select>
+  <select id="selectByRecommendedNoAndPosNo" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from recommend
+    WHERE RepNo = #{repno,jdbcType=INTEGER} and PosNo = #{posno,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from recommend
+    where RcdNo = #{rcdno,jdbcType=INTEGER}
+  </select>
+  <select id="selectUserNoByRecommendedPersonID" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select UserNo
+    from recommend
+    where RcdNo = #{rcdno,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from recommend
+    where RcdNo = #{rcdno,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByRepNo" parameterType="java.lang.Integer">
+    delete from recommend
+    where RepNo = #{repno,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hdu.rps.model.Recommend">
+    insert into recommend (RcdNo, UserNo, RePNo, 
+      RcdState, RcdAddTime, RcdModTime, 
+      RcdIntro, PosNo)
+    values (#{rcdno,jdbcType=INTEGER}, #{userno,jdbcType=INTEGER}, #{repno,jdbcType=INTEGER}, 
+      #{rcdstate,jdbcType=INTEGER}, #{rcdaddtime,jdbcType=VARCHAR}, #{rcdmodtime,jdbcType=VARCHAR}, 
+      #{rcdintro,jdbcType=VARCHAR}, #{posno,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hdu.rps.model.Recommend">
+    insert into recommend
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rcdno != null">
+        RcdNo,
+      </if>
+      <if test="userno != null">
+        UserNo,
+      </if>
+      <if test="repno != null">
+        RePNo,
+      </if>
+      <if test="rcdstate != null">
+        RcdState,
+      </if>
+      <if test="rcdaddtime != null">
+        RcdAddTime,
+      </if>
+      <if test="rcdmodtime != null">
+        RcdModTime,
+      </if>
+      <if test="rcdintro != null">
+        RcdIntro,
+      </if>
+      <if test="posno != null">
+        PosNo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rcdno != null">
+        #{rcdno,jdbcType=INTEGER},
+      </if>
+      <if test="userno != null">
+        #{userno,jdbcType=INTEGER},
+      </if>
+      <if test="repno != null">
+        #{repno,jdbcType=INTEGER},
+      </if>
+      <if test="rcdstate != null">
+        #{rcdstate,jdbcType=INTEGER},
+      </if>
+      <if test="rcdaddtime != null">
+        #{rcdaddtime,jdbcType=VARCHAR},
+      </if>
+      <if test="rcdmodtime != null">
+        #{rcdmodtime,jdbcType=VARCHAR},
+      </if>
+      <if test="rcdintro != null">
+        #{rcdintro,jdbcType=VARCHAR},
+      </if>
+      <if test="posno != null">
+        #{posno,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hdu.rps.model.Recommend">
+    update recommend
+    <set>
+      <if test="userno != null">
+        UserNo = #{userno,jdbcType=INTEGER},
+      </if>
+      <if test="repno != null">
+        RePNo = #{repno,jdbcType=INTEGER},
+      </if>
+      <if test="rcdstate != null">
+        RcdState = #{rcdstate,jdbcType=INTEGER},
+      </if>
+      <if test="rcdaddtime != null">
+        RcdAddTime = #{rcdaddtime,jdbcType=VARCHAR},
+      </if>
+      <if test="rcdmodtime != null">
+        RcdModTime = #{rcdmodtime,jdbcType=VARCHAR},
+      </if>
+      <if test="rcdintro != null">
+        RcdIntro = #{rcdintro,jdbcType=VARCHAR},
+      </if>
+      <if test="posno != null">
+        PosNo = #{posno,jdbcType=INTEGER},
+      </if>
+    </set>
+    where RcdNo = #{rcdno,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hdu.rps.model.Recommend">
+    update recommend
+    set UserNo = #{userno,jdbcType=INTEGER},
+      RePNo = #{repno,jdbcType=INTEGER},
+      RcdState = #{rcdstate,jdbcType=INTEGER},
+      RcdAddTime = #{rcdaddtime,jdbcType=VARCHAR},
+      RcdModTime = #{rcdmodtime,jdbcType=VARCHAR},
+      RcdIntro = #{rcdintro,jdbcType=VARCHAR},
+      PosNo = #{posno,jdbcType=INTEGER}
+    where RcdNo = #{rcdno,jdbcType=INTEGER}
+  </update>
+</mapper>

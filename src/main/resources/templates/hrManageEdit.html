@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>HR信息编辑</title>
+    <link rel="stylesheet" href="../resources/pintuer.css" th:href="@{/pintuer.css}"/>
+</head>
+<body style="margin-top: 5%">
+    <div class="border">
+        <form th:action="@{/ad/hrManage/edit/submit/{userno}(userno = ${user.userno})}" id="payment">
+            <fieldset>
+                <legend>HR信息编辑</legend>
+                <ol>
+                    <li>
+                        <label for="name">姓名：</label>
+                        <input id="name" name="name" type="text" th:value="${user.username}" placeholder="请输入用户名" required="required" autofocus="autofocus"/>
+                    </li>
+                    <li>
+                        <label for="phone">联系电话：</label>
+                        <input id="phone" name="phone" type="text" th:value="${user.userphone}" required="required" maxlength="11"/>
+                    </li>
+                    <li>
+                        <label for="email">邮件地址：</label>
+                        <input id="email" name="email" type="email" th:value="${user.useremail}" required="required" />
+                    </li>
+                    <li>
+                        <label for="password">密码：</label>
+                        <input id="password" name="password" th:value="${user.userpassword}" required="required" />
+                    </li>
+                    <li>
+                        <label for="sex">性别</label>
+                        <select id="sex" name="sex">
+                            <option th:selected="${user.usergender eq '男'}">男</option>
+                            <option th:selected="${user.usergender eq '女'}">女</option>
+                        </select>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset>
+                <br/>
+                <div style="margin-left: 85%;margin-top: 2%">
+                    <input type="submit" value="提交" class="button border-blue"  />
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>
